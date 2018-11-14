@@ -14,7 +14,6 @@ public class TextInterface {
 		System.out.println("3) Quit");
 		
 		Scanner sc = new Scanner(System.in);
-		
 		String line = sc.nextLine();
 
 		if (line.length()>1){
@@ -49,7 +48,14 @@ public class TextInterface {
 		System.out.println("5) Return to the initial menu");
 		
 		Scanner product_sc = new Scanner(System.in);
-		char choice_list_product = product_sc.nextLine().charAt(0);
+		String line_products = product_sc.nextLine();
+
+		if (line_products.length()>1){
+			System.out.println("Invalid input");
+			ListProducts();
+		}
+		
+		char choice_list_product = line_products.charAt(0);
 
 		switch (choice_list_product) {
 		
@@ -82,7 +88,14 @@ public class TextInterface {
 		System.out.println("5) Return to the initial menu");
 
 	Scanner shelf_sc = new Scanner(System.in);
-	char choice_list_shelf = shelf_sc.nextLine().charAt(0);
+	String line_shelf = shelf_sc.nextLine();
+	
+	if (line_shelf.length()>1) {
+		System.out.println("Invalid Input");
+		ListShelves();
+	}
+	char choice_list_shelf = line_shelf.charAt(0);
+	
 
 	switch (choice_list_shelf) {
 	
