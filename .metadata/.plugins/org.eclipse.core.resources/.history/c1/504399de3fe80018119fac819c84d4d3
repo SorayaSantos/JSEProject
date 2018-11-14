@@ -16,7 +16,7 @@ public class TextInterface {
 		Scanner sc = new Scanner(System.in);
 		
 		String line = sc.nextLine();
-
+		System.out.println("Tamanho "+ line.length());
 		if (line.length()>1){
 			System.out.println("Invalid input");
 			BeginMenu();
