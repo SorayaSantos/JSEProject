@@ -1,0 +1,13 @@
+package io.altar.jseproject.model;
+
+public class Product {
+	
+	private int id;
+	private Shelf[] shelves_list;
+	private int discount;
+	private int iva;
+	private int pvp;
+	
+
+
+}

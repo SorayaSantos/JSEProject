@@ -1,0 +1,16 @@
+package io.altar.jseproject.model;
+
+public class Shelf {
+
+	private int id;
+	private int capacity;
+	private Product product;
+	private int price;
+	public Shelf(int id, int capacity, Product product, int price) {
+		super();
+		this.id = id;
+		this.capacity = capacity;
+		this.product = product;
+		this.price = price;
+	}		
+}

@@ -1,0 +1,10 @@
+package io.altar.jseproject.model;
+
+public class Product {
+	
+	private int ID;
+	private array shelves_list;
+	private int discount;
+	private 
+
+}
