@@ -1,6 +1,8 @@
 package io.altar.jseproject.textinterface;
 import java.util.Scanner;
 
+import io.altar.jseproject.model.Product;
+
 public class TextInterface {
 	
 	public static void main(String[] args) {
@@ -117,5 +119,12 @@ public class TextInterface {
     	ListShelves();
 }
 	shelf_sc .close();
+	}
+	
+	public static void DisplayProduct() {
+		Product[] listOfProducts;
+				
+		//for i in listOfProducts
+		
 	}
 }
