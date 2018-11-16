@@ -3,7 +3,6 @@ package io.altar.jseproject.textinterface;
 import java.util.Scanner;
 
 import io.altar.jseproject.model.Product;
-import io.altar.jseproject.model.Shelf;
 
 public class TextInterface {
 
@@ -162,7 +161,7 @@ public class TextInterface {
 		// for i in listOfProducts
 
 	}
-	public static void CreateProduct(int id, Shelf[] shelves_list, int discount, int iva, int pvp) {
+	public static void DisplayProduct() {
 		// Product[] listOfProducts;
 
 		// for i in listOfProducts
