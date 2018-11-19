@@ -1,0 +1,19 @@
+package io.altar.jseproject.repositories;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import io.altar.jseproject.model.Entity;
+
+public abstract class EntityRepository<T extends Entity> {
+
+	private Map<Long, T> map = new LinkedHashMap<Long, T>();
+
+	private long actualId = 0;
+
+	private void nextId(T ent) {
+		ent.setId(actualId);
+		actualId++;
+	}
+
+}

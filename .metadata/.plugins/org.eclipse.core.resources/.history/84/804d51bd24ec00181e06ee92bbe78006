@@ -1,0 +1,17 @@
+package io.altar.jseproject.model;
+
+public class Entity {
+	
+	public void DisplayProduct() {
+		// Product[] listOfProducts;
+
+		// for i in listOfProducts
+
+	}
+	public void CreateProduct(int id, Shelf[] shelves_list, int discount, int iva, int pvp) {
+		// Product[] listOfProducts;
+
+		// for i in listOfProducts
+
+	}
+}
