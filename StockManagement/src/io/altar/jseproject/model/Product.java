@@ -1,13 +1,15 @@
 package io.altar.jseproject.model;
 
+import java.util.ArrayList;
+
 public class Product extends Entity{
 	
-	private Shelf[] shelves_list;
+	private ArrayList<Shelf> shelves_list= new ArrayList<Shelf>();
 	private int discount;
 	private int iva;
 	private int pvp;
 
-	public Product(Shelf[] shelves_list, int discount, int iva, int pvp) {
+	public Product(ArrayList<Shelf> shelves_list, int discount, int iva, int pvp) {
 		super();
 		this.shelves_list = shelves_list;
 		this.discount = discount;
@@ -15,11 +17,11 @@ public class Product extends Entity{
 		this.pvp = pvp;
 	}
 
-	public Shelf[] getShelves_list() {
+	public ArrayList<Shelf> getShelves_list() {
 		return shelves_list;
 	}
 
-	public void setShelves_list(Shelf[] shelves_list) {
+	public void setShelves_list(ArrayList<Shelf> shelves_list) {
 		this.shelves_list = shelves_list;
 	}
 
@@ -46,7 +48,14 @@ public class Product extends Entity{
 	public void setPvp(int pvp) {
 		this.pvp = pvp;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Product"+getId()+" [shelves_list=" + shelves_list + ", discount=" + discount + ", iva=" + iva + ", pvp=" + pvp
+				+ "]";
+	}
+
+
 	
 
 }

@@ -1,6 +1,6 @@
 package io.altar.jseproject.repositories;
 
-import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -13,7 +13,7 @@ public abstract class EntityRepository<T extends Entity> {
 
 
 	private long nextId(){
-		return actualId + 1;
+		return actualId ++;
 	}
 
 	public long CreateEntities(T ent) {
@@ -22,8 +22,8 @@ public abstract class EntityRepository<T extends Entity> {
 		map.put(ent.getId(), ent);
 		return newId;
 	}
-	public Collection<T> ConsultEntities() {
-		return map.values();	
+	public Iterator<T> ConsultEntities() {
+		return map.values().iterator();	
 	}
 	public T ConsultEntityById(Long id){
 		return map.get(id);
@@ -34,6 +34,5 @@ public abstract class EntityRepository<T extends Entity> {
 	public void RemoveEntityById(Long id){
 		map.remove(id);
 	}
-
 
 }

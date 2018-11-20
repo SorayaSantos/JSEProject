@@ -5,4 +5,11 @@
 <fullyQualifiedTypeName name="java.util.Map"/>
 <fullyQualifiedTypeName name="java.util.ArrayList"/>
 <fullyQualifiedTypeName name="java.util.Collection"/>
+<fullyQualifiedTypeName name="io.altar.jseproject.model.Shelf"/>
+<fullyQualifiedTypeName name="io.altar.jseproject.repositories.ProductRepository"/>
+<fullyQualifiedTypeName name="io.altar.jseproject.repositories.ShelfRepository"/>
+<fullyQualifiedTypeName name="java.util.Scanner"/>
+<fullyQualifiedTypeName name="io.altar.jseproject.model.Product"/>
+<fullyQualifiedTypeName name="java.util.Iterator"/>
+<fullyQualifiedTypeName name="io.altar.jseproject.repositories.EntityRepository"/>
 </qualifiedTypeNameHistroy>

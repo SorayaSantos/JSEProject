@@ -1,19 +1,27 @@
 package io.altar.jseproject.textinterface;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Scanner;
 
 import io.altar.jseproject.model.Product;
 import io.altar.jseproject.model.Shelf;
+import io.altar.jseproject.repositories.ProductRepository;
+import io.altar.jseproject.repositories.ShelfRepository;
 
 public class TextInterface {
+	static ProductRepository productRepository1 = ProductRepository.getInstance();
+	static ShelfRepository shelfRepository1 = ShelfRepository.getInstance();
+	private static Scanner sc = new Scanner(System.in);
+
 
 	public static void main(String[] args) {
+
 		BeginMenu();
 	}
 
 	public static void BeginMenu() {
 		char choice = ' ';
-		Scanner sc = new Scanner(System.in);
 		String line = "";
 		do {
 			System.out.println("Please select one of the follow options: ");
@@ -22,7 +30,7 @@ public class TextInterface {
 			System.out.println("2) List shelves");
 			System.out.println("3) Quit");
 
-				line = sc.nextLine();
+			line = sc.nextLine();
 
 			if (line.length() > 1 || line.length() == 0) {
 				System.out.println("Invalid input");
@@ -33,15 +41,16 @@ public class TextInterface {
 			switch (choice) {
 
 			case '1':
-				ListProducts();
+				ConsultProducts();
 				break;
 
 			case '2':
-				ListShelves();
+				ConsultShelves();
 				break;
 
 			case '3':
 				System.out.println("Application closed. ");
+				sc.close();
 				break;
 
 			default:
@@ -51,14 +60,14 @@ public class TextInterface {
 
 		} while (choice > '3' || choice < '1');
 
-		sc.close();
 	}
 
-	public static void ListProducts() {
+	public static void ConsultProducts() {
+		
+		ListProducts();
 
-		char choice= ' ';
-		Scanner sc = new Scanner(System.in);
-		String line="";
+		char choice = ' ';
+		String line = "";
 
 		do {
 
@@ -70,18 +79,18 @@ public class TextInterface {
 			System.out.println("4) Remove a product");
 			System.out.println("5) Return to the initial menu");
 
-			line =sc.nextLine();
+			line = sc.nextLine();
 
 			if (line.length() > 1 || line.length() == 0) {
 				System.out.println("Invalid input");
 				continue;
 			}
 
-			choice= line.charAt(0);
+			choice = line.charAt(0);
 
 			switch (choice) {
 
-			case '1': // CreateProduct();
+			case '1':  CreateProduct();
 				break;
 
 			case '2': // EditProduct();
@@ -101,13 +110,12 @@ public class TextInterface {
 			}
 		} while (choice > '5' || choice < '1');
 
-		sc.close();
 	}
 
-	public static void ListShelves() {
-
+	public static void ConsultShelves() {
+		
+		ListShelves();
 		char choice = ' ';
-		Scanner sc = new Scanner(System.in);
 		String line = "";
 		do {
 			System.out.println("Please select one of the follow options: ");
@@ -118,7 +126,7 @@ public class TextInterface {
 			System.out.println("4) Remove a shelf");
 			System.out.println("5) Return to the initial menu");
 
-			line= sc.nextLine();
+			line = sc.nextLine();
 
 			// statements that may cause an exception
 
@@ -152,20 +160,45 @@ public class TextInterface {
 		}
 
 		while (choice > '5' || choice < '1');
-
-		sc.close();
 	}
 
-	public static void DisplayProduct() {
-		// Product[] listOfProducts;
-
-		// for i in listOfProducts
-
+	public static void ListProducts() {
+		Iterator<Product> productIterator = productRepository1.ConsultEntities();
+		while (productIterator.hasNext()){
+			System.out.println(productIterator.next().toString());
+		}
 	}
-	public static void CreateProduct(int id, Shelf[] shelves_list, int discount, int iva, int pvp) {
-		// Product[] listOfProducts;
-
-		// for i in listOfProducts
-
+	
+	public static void ListShelves() {
+		shelfRepository1.ConsultEntities();
+	}
+	
+	public static void CreateProduct() {
+		System.out.println("Please insert the discount: ");
+		int discount = sc.nextInt();
+		System.out.println("Please insert the iva: ");
+		int iva = sc.nextInt();
+		System.out.println("Please insert the pvp: ");
+		int pvp = sc.nextInt();
+		ArrayList<Shelf> shelvesList = new ArrayList<Shelf>();
+		
+		Product product = new Product(shelvesList, discount, iva, pvp);
+		productRepository1.CreateEntities(product);
+		sc.nextLine();
+		BeginMenu(); 
+	}
+	public static void EditProduct() {
+		System.out.println("Please insert the discount: ");
+		int discount = sc.nextInt();
+		System.out.println("Please insert the iva: ");
+		int iva = sc.nextInt();
+		System.out.println("Please insert the pvp: ");
+		int pvp = sc.nextInt();
+		ArrayList<Shelf> shelvesList = new ArrayList<Shelf>();
+		
+		Product product = new Product(shelvesList, discount, iva, pvp);
+		productRepository1.CreateEntities(product);
+		sc.nextLine();
+		BeginMenu(); 
 	}
 }
