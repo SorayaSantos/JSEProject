@@ -38,6 +38,11 @@ public class Shelf extends Entity{
 	public void setPrice(int price) {
 		this.price = price;
 	}
+
+	@Override
+	public String toString() {
+		return "Shelf [capacity=" + capacity + ", product=" + product.toString() + ", price=" + price + "]";
+	}
 	
 	
 }

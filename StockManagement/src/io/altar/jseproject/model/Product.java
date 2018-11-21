@@ -48,10 +48,18 @@ public class Product extends Entity{
 	public void setPvp(int pvp) {
 		this.pvp = pvp;
 	}
+	private String getStringOfShelves(){
+		String str="";
+		for(int i=0;i<shelves_list.size();i++){
+			str+=shelves_list.get(i).getId();
+			str+=", ";
+		}
+		return str;
+	}
 
 	@Override
 	public String toString() {
-		return "Product"+getId()+" [shelves_list=" + shelves_list + ", discount=" + discount + ", iva=" + iva + ", pvp=" + pvp
+		return "Product"+getId()+" [shelves_list=" + getStringOfShelves()+ " discount=" + discount + ", iva=" + iva + ", pvp=" + pvp
 				+ "]";
 	}
 

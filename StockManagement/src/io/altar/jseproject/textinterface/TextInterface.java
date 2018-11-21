@@ -15,7 +15,6 @@ public class TextInterface {
 	static ShelfRepository shelfRepository1 = ShelfRepository.getInstance();
 	private static Scanner sc = new Scanner(System.in);
 
-
 	public static void main(String[] args) {
 
 		BeginMenu();
@@ -60,11 +59,10 @@ public class TextInterface {
 			}
 
 		} while (choice > '3' || choice < '1');
-
 	}
 
 	public static void ConsultProducts() {
-		
+
 		ListProducts();
 
 		char choice = ' ';
@@ -91,15 +89,19 @@ public class TextInterface {
 
 			switch (choice) {
 
-			case '1':  CreateProduct();
+			case '1':
+				CreateProduct();
 				break;
 
-			case '2':  EditProduct();
+			case '2':
+				EditProduct();
 				break;
 
-			case '3':  ConsultProduct();
+			case '3':
+				ConsultProduct();
 				break;
-			case '4':  RemoveProduct();
+			case '4':
+				RemoveProduct();
 				break;
 			case '5':
 				BeginMenu();
@@ -110,11 +112,11 @@ public class TextInterface {
 				break;
 			}
 		} while (choice > '5' || choice < '1');
-
+		
 	}
 
 	public static void ConsultShelves() {
-		
+
 		ListShelves();
 		char choice = ' ';
 		String line = "";
@@ -140,7 +142,8 @@ public class TextInterface {
 
 			switch (choice) {
 
-			case '1': // CreateShelf();
+			case '1':
+				CreateShelf();
 				break;
 
 			case '2': // EditShelf();
@@ -164,23 +167,28 @@ public class TextInterface {
 	}
 
 	public static void ListProducts() {
-		
-		//Iterator<Product> productIterator = productRepository1.ConsultEntities2();
-		//while (productIterator.hasNext()){
-			//System.out.println(productIterator.next().toString());
-		//}
-		//System.out.println(productRepository1.ConsultEntities());
+
+		// Iterator<Product> productIterator =
+		// productRepository1.ConsultEntities2();
+		// while (productIterator.hasNext()){
+		// System.out.println(productIterator.next().toString());
+		// }
+		// System.out.println(productRepository1.ConsultEntities());
 		Collection<Product> values = productRepository1.ConsultEntities();
-		
-		for (Product product : values ) {
+
+		for (Product product : values) {
 			System.out.println(product);
-		} //dúvida como é que o programa sabe que tem que passar para string se não uso a funçao to string?;
+		}
 	}
-	
+
 	public static void ListShelves() {
-		//shelfRepository1.ConsultEntities();
+		Collection<Shelf> values = shelfRepository1.ConsultEntities();
+
+		for (Shelf shelf : values) {
+			System.out.println(shelf);
+		}
 	}
-	
+
 	public static void CreateProduct() {
 		System.out.println("Please insert the discount: ");
 		int discount = sc.nextInt();
@@ -189,45 +197,79 @@ public class TextInterface {
 		System.out.println("Please insert the pvp: ");
 		int pvp = sc.nextInt();
 		ArrayList<Shelf> shelvesList = new ArrayList<Shelf>();
-		
+
 		Product product = new Product(shelvesList, discount, iva, pvp);
 		productRepository1.CreateEntities(product);
 		sc.nextLine();
-		BeginMenu(); 
+		ConsultProducts();
 	}
+
+	public static void CreateShelf() {
+		ArrayList<Shelf> shelvesList = new ArrayList<Shelf>();
+		System.out.println("Please insert shelf capacity: ");
+		int capacity = sc.nextInt();
+		System.out.println("Please insert id of the product to be stored: ");
+		long productId = sc.nextLong();
+		System.out.println("Please insert rent price (diary): ");
+		int price = sc.nextInt();
+		int found = 0;
+
+		Collection<Product> values = productRepository1.ConsultEntities();
+		for (Product prod : values) {
+			if (prod.getId() == productId) {
+				Shelf shelf = new Shelf(capacity, prod, price);
+				shelvesList.add(shelf);
+				prod.setShelves_list(shelvesList);
+				shelfRepository1.CreateEntities(shelf);
+				found = 1;
+				break;
+			}
+		}
+		if (found == 0) {
+			System.out.println("Id of product not found. Create the product first.");
+			sc.nextLine();
+			ConsultProducts();
+		}
+		sc.nextLine();
+		ConsultShelves();
+	}
+
 	public static void EditProduct() {
 		System.out.println("Please insert the id of the product: ");
-		long id = sc.nextInt();
+		long id = sc.nextLong();
 		System.out.println("Please insert the new discount: ");
 		int discount = sc.nextInt();
 		System.out.println("Please insert the new iva: ");
 		int iva = sc.nextInt();
 		System.out.println("Please insert the new pvp: ");
 		int pvp = sc.nextInt();
-		
+
 		ArrayList<Shelf> shelvesList = new ArrayList<Shelf>();
-		
+
 		Product product = new Product(shelvesList, discount, iva, pvp);
 		product.setId(id);
-		
-		productRepository1.EditEntityById(id,product);//ver o que fazer em relação às shelves
+
+		productRepository1.EditEntityById(id, product);// ver o que fazer em
+														// relaï¿½ï¿½o ï¿½s shelves
 		sc.nextLine();
-		BeginMenu(); 
+		BeginMenu();
 	}
+
 	public static void ConsultProduct() {
 		System.out.println("Please insert the id of the product: ");
-		long id = sc.nextInt();
-		
+		long id = sc.nextLong();
+
 		System.out.println(productRepository1.ConsultEntityById(id));
 		sc.nextLine();
-		BeginMenu(); 
+		BeginMenu();
 	}
+
 	public static void RemoveProduct() {
 		System.out.println("Please insert the id of the product to be removed: ");
-		long id = sc.nextInt();
-		
+		long id = sc.nextLong();
+
 		productRepository1.RemoveEntityById(id);
 		sc.nextLine();
-		BeginMenu(); 
+		ConsultProducts();
 	}
 }
