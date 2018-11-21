@@ -235,7 +235,7 @@ public class TextInterface {
 	}
 
 	public static void EditProduct() {
-		System.out.println("Please insert the id of the product: ");
+		System.out.println("Please insert the id of the product to be changed: ");
 		long id = sc.nextLong();
 		System.out.println("Please insert the new discount: ");
 		int discount = sc.nextInt();
@@ -252,8 +252,41 @@ public class TextInterface {
 		productRepository1.EditEntityById(id, product);// ver o que fazer em
 														// rela��o �s shelves
 		sc.nextLine();
-		BeginMenu();
+		ConsultProducts();
 	}
+	public static void EditShelf() {
+		ArrayList<Shelf> shelvesList = new ArrayList<Shelf>();
+		Collection<Product> values = productRepository1.ConsultEntities();
+
+		System.out.println("Please insert the id of the shelf to be changed: ");
+		long id = sc.nextLong();
+		System.out.println("Please insert the new shelf capacity: ");//adicionar cenas atuais com + "Actual shelf capacity:"+ shelf...
+		int capacity = sc.nextInt();
+		System.out.println("Please insert new id of the product to be stored: ");
+		long productId = sc.nextLong();
+		System.out.println("Please insert the new rent price (diary): ");
+		int price = sc.nextInt();
+		int found=0;		
+		
+		for (Product product:values){
+			if (product.getId()==productId){
+				Shelf shelf = new Shelf(capacity,product,price);
+				shelf.setId(id);
+				shelvesList.add(shelf);
+				product.setShelves_list(shelvesList);
+				shelfRepository1.CreateEntities(shelf);
+				found=1;
+				}
+			}
+		if (found == 0) {
+			System.out.println("Id of product not found. Create the product first.");
+			sc.nextLine();
+			ConsultProducts();
+		}
+		sc.nextLine();
+		ConsultShelves();
+		}
+
 
 	public static void ConsultProduct() {
 		System.out.println("Please insert the id of the product: ");
