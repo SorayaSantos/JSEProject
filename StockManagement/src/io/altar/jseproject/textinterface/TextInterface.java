@@ -149,9 +149,9 @@ public class TextInterface {
 			case '2':  EditShelf();
 				break;
 
-			case '3': // ConsultShelf();
+			case '3': ConsultShelf();
 				break;
-			case '4': // RemoveShelf();
+			case '4':  RemoveShelf();
 				break;
 			case '5':
 				BeginMenu();
@@ -310,6 +310,14 @@ public class TextInterface {
 		sc.nextLine();
 		BeginMenu();
 	}
+	public static void ConsultShelf() {
+		System.out.println("Please insert the id of the shelf: ");
+		long id = sc.nextLong();
+
+		System.out.println(shelfRepository1.ConsultEntityById(id));
+		sc.nextLine();
+		BeginMenu();
+	}
 
 	public static void RemoveProduct() {
 		System.out.println("Please insert the id of the product to be removed: ");
@@ -318,5 +326,20 @@ public class TextInterface {
 		productRepository1.RemoveEntityById(id);
 		sc.nextLine();
 		ConsultProducts();
+	}
+	public static void RemoveShelf() {
+		System.out.println("Please insert the id of the shelf to be removed: ");
+		long id = sc.nextLong();
+		
+		Shelf shelf = shelfRepository1.ConsultEntityById(id);
+		Product product = shelf.getProduct();
+		ArrayList<Shelf> shelvesList = new ArrayList<Shelf>();
+		shelvesList = product.getShelves_list();
+		shelvesList.remove(shelf);
+		
+
+		shelfRepository1.RemoveEntityById(id);
+		sc.nextLine();
+		ConsultShelves();
 	}
 }
