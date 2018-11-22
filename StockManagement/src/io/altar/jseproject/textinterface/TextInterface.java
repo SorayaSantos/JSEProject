@@ -146,7 +146,7 @@ public class TextInterface {
 				CreateShelf();
 				break;
 
-			case '2': // EditShelf();
+			case '2':  EditShelf();
 				break;
 
 			case '3': // ConsultShelf();
@@ -218,6 +218,7 @@ public class TextInterface {
 		for (Product prod : values) {
 			if (prod.getId() == productId) {
 				Shelf shelf = new Shelf(capacity, prod, price);
+				shelvesList = prod.getShelves_list();
 				shelvesList.add(shelf);
 				prod.setShelves_list(shelvesList);
 				shelfRepository1.CreateEntities(shelf);
@@ -256,6 +257,8 @@ public class TextInterface {
 	}
 	public static void EditShelf() {
 		ArrayList<Shelf> shelvesList = new ArrayList<Shelf>();
+		ArrayList<Shelf> shelvesListToBeChanged = new ArrayList<Shelf>();
+
 		Collection<Product> values = productRepository1.ConsultEntities();
 
 		System.out.println("Please insert the id of the shelf to be changed: ");
@@ -266,15 +269,26 @@ public class TextInterface {
 		long productId = sc.nextLong();
 		System.out.println("Please insert the new rent price (diary): ");
 		int price = sc.nextInt();
-		int found=0;		
+		int found=0;
+		
+		Shelf shelfToBeChanged = shelfRepository1.ConsultEntityById(id);
+		//int capacityToBeChanged=shelfToBeChanged.getCapacity();
+		Product productToBeChanged=shelfToBeChanged.getProduct();
+		//int priceToBeChanged=shelfToBeChanged.getPrice();
+		shelvesListToBeChanged=productToBeChanged.getShelves_list();
+		
 		
 		for (Product product:values){
 			if (product.getId()==productId){
 				Shelf shelf = new Shelf(capacity,product,price);
 				shelf.setId(id);
+				shelvesList=product.getShelves_list();
+				shelvesList.remove(shelfToBeChanged);
+				shelvesListToBeChanged.remove(shelfToBeChanged);
+				productToBeChanged.setShelves_list(shelvesListToBeChanged);
 				shelvesList.add(shelf);
 				product.setShelves_list(shelvesList);
-				shelfRepository1.CreateEntities(shelf);
+				shelfRepository1.EditEntityById(id, shelf);
 				found=1;
 				}
 			}
