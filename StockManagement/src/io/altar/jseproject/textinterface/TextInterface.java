@@ -112,7 +112,7 @@ public class TextInterface {
 				break;
 			}
 		} while (choice > '5' || choice < '1');
-		
+
 	}
 
 	public static void ConsultShelves() {
@@ -146,12 +146,15 @@ public class TextInterface {
 				CreateShelf();
 				break;
 
-			case '2':  EditShelf();
+			case '2':
+				EditShelf();
 				break;
 
-			case '3': ConsultShelf();
+			case '3':
+				ConsultShelf();
 				break;
-			case '4':  RemoveShelf();
+			case '4':
+				RemoveShelf();
 				break;
 			case '5':
 				BeginMenu();
@@ -251,72 +254,100 @@ public class TextInterface {
 		product.setPvp(pvp);
 
 		productRepository1.EditEntityById(id, product);
-														
+
 		sc.nextLine();
 		ConsultProducts();
 	}
+
+	public static boolean verificaVariavel(String var, String tipo) {
+		try {
+			switch (tipo) {
+			case "long":
+				Long.parseLong(var);
+				break;
+			case "int":
+				Integer.parseInt(var);
+				break;
+			case "float":
+				Float.parseFloat(var);
+				break;
+			}
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
+	}
+
 	public static void EditShelf() {
-	
+		String idStr = "";
+		long id;
 		ArrayList<Shelf> shelvesList = new ArrayList<Shelf>();
 		ArrayList<Shelf> actualShelvesList = new ArrayList<Shelf>();
 
 		Collection<Product> values = productRepository1.ConsultEntities();
 
-		System.out.println("Please insert the id of the shelf to be changed: ");//proteger codigo contra valores que nao sao id
-		long id = sc.nextLong();
-		
-		if (id == (long)id)
-		{
-			Shelf shelfToBeChanged = shelfRepository1.ConsultEntityById(id);
-			int actualCapacity=shelfToBeChanged.getCapacity();
-			Product actualProduct=shelfToBeChanged.getProduct();
-			long actualIdProduct = actualProduct.getId();
-			int actualPrice=shelfToBeChanged.getPrice();
-			actualShelvesList=actualProduct.getShelves_list();
+		do {
+			System.out.println("Please insert the id of the shelf to be changed: ");
 
-			System.out.println("Please insert the new shelf capacity:            Actual capacity: ("+actualCapacity+")" );//adicionar cenas atuais com + "Actual shelf capacity:"+ shelf...
-			int capacity = sc.nextInt();
-			
-			System.out.println("Please insert new id of the product to be stored:            Actual id: ("+actualIdProduct+")" );
-			long productId = sc.nextLong();
-			
-			System.out.println("Please insert the new rent price (diary):            Actual rent price: ("+actualPrice+")" );
-			int price = sc.nextInt();
-			int found=0;				
-			
-			for (Product product:values){
-				if (product.getId()==productId){
-					Shelf shelf = shelfRepository1.ConsultEntityById(id);
-					shelf.setCapacity(capacity);
-					shelf.setProduct(product);
-					shelf.setPrice(price);
+			idStr = sc.nextLine();
 
-					shelvesList=product.getShelves_list();
-					shelvesList.remove(shelfToBeChanged);
-					actualShelvesList.remove(shelfToBeChanged);
-					actualProduct.setShelves_list(actualShelvesList);
-					shelvesList.add(shelf);
-					product.setShelves_list(shelvesList);
-					
-					shelfRepository1.EditEntityById(id, shelf);
-					found=1;
-					}
-				}
-			if (found == 0) {
-				System.out.println("Id of product not found. Create the product first.");
-				sc.nextLine();
-				ConsultProducts();
+			if (verificaVariavel(idStr, "long")) {
+				break;
+			} else {
+				System.out.println("Invalid input! Insert valid id!");
 			}
-			sc.nextLine();
-			ConsultShelves();
-		}
-		else{
-			System.out.println("Invalid input");
-		}
+			
+		}while (!verificaVariavel(idStr, "long"));
+
+		id = Long.parseLong(idStr);
 		
+		Shelf shelfToBeChanged = shelfRepository1.ConsultEntityById(id);
+		if (shelfToBeChanged == null){}
+		int actualCapacity = shelfToBeChanged.getCapacity();
+		Product actualProduct = shelfToBeChanged.getProduct();
+		long actualIdProduct = actualProduct.getId();
+		int actualPrice = shelfToBeChanged.getPrice();
+		actualShelvesList = actualProduct.getShelves_list();
 
+		System.out.println("Please insert the new shelf capacity:            Actual capacity: (" + actualCapacity + ")");
+
+		int capacity = sc.nextInt();
+
+		System.out.println(
+				"Please insert new id of the product to be stored:            Actual id: (" + actualIdProduct + ")");
+		long productId = sc.nextLong();
+
+		System.out.println(
+				"Please insert the new rent price (diary):            Actual rent price: (" + actualPrice + ")");
+		int price = sc.nextInt();
+		int found = 0;
+
+		for (Product product : values) {
+			if (product.getId() == productId) {
+				Shelf shelf = shelfRepository1.ConsultEntityById(id);
+				shelf.setCapacity(capacity);
+				shelf.setProduct(product);
+				shelf.setPrice(price);
+
+				shelvesList = product.getShelves_list();
+				shelvesList.remove(shelfToBeChanged);
+				actualShelvesList.remove(shelfToBeChanged);
+				actualProduct.setShelves_list(actualShelvesList);
+				shelvesList.add(shelf);
+				product.setShelves_list(shelvesList);
+
+				shelfRepository1.EditEntityById(id, shelf);
+				found = 1;
+			}
 		}
-
+		if (found == 0) {
+			System.out.println("Id of product not found. Create the product first.");
+			sc.nextLine();
+			ConsultProducts();
+		}
+		sc.nextLine();
+		ConsultShelves();
+	}
 
 	public static void ConsultProduct() {
 		System.out.println("Please insert the id of the product: ");
@@ -326,6 +357,7 @@ public class TextInterface {
 		sc.nextLine();
 		BeginMenu();
 	}
+
 	public static void ConsultShelf() {
 		System.out.println("Please insert the id of the shelf: ");
 		long id = sc.nextLong();
@@ -343,16 +375,16 @@ public class TextInterface {
 		sc.nextLine();
 		ConsultProducts();
 	}
+
 	public static void RemoveShelf() {
 		System.out.println("Please insert the id of the shelf to be removed: ");
 		long id = sc.nextLong();
-		
+
 		Shelf shelf = shelfRepository1.ConsultEntityById(id);
 		Product product = shelf.getProduct();
 		ArrayList<Shelf> shelvesList = new ArrayList<Shelf>();
 		shelvesList = product.getShelves_list();
 		shelvesList.remove(shelf);
-		
 
 		shelfRepository1.RemoveEntityById(id);
 		sc.nextLine();
