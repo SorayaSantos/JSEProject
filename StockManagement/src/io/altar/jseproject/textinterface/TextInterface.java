@@ -271,76 +271,72 @@ public class TextInterface {
 			case "float":
 				Float.parseFloat(var);
 				break;
+			case "double":
+				Double.parseDouble(var);
+				break;
 			}
 		} catch (Exception e) {
 			return false;
 		}
 		return true;
 	}
-	public static void CicleInput(String line, String var, String type) {
+	public static String cicleInput(String line, String type) {
+		String idString = "";
 		
-		do {
-
-			if (verificaVariavel(var, type)) {
-				break;
-			} else {
+		do {		idString = sc.nextLine();
+			if (!verificaVariavel(idString, type)) {
 				System.out.println("Invalid input!");
 				System.out.println(line);
 			}
-		} while (!verificaVariavel(var, type));
+		} while (!verificaVariavel(idString, type));
+		return idString;
 	}
 	
 	public static void EditShelf() {
-		String idString = "";
+		
 		String capacityString = "";
 		String idProductString = "";
 		String priceString = "";
 		String inputId = "";
-		String inputCapacity = "";
-		String inputIdProduct = "";
-		String inputPrice = "";
-		long id;
-		long capacity;
-		long idProduct;
-		double price;
+
+		String idString = "";
+		long id=0, capacity=0, idProduct=0;
+		double price=01;
 		ArrayList<Shelf> shelvesList = new ArrayList<Shelf>();
 		ArrayList<Shelf> actualShelvesList = new ArrayList<Shelf>();
 		Collection<Product> values = productRepository1.ConsultEntities();
 		
 		inputId = "Please insert the id of the shelf to be changed: ";
 		System.out.println(inputId);
-		idString = sc.nextLine();
-		CicleInput(inputId,idString,"long");
+		idString = cicleInput(inputId,"long");
 		id = Long.parseLong(idString);
 		
 		Shelf shelfToBeChanged = shelfRepository1.ConsultEntityById(id);
 		if (shelfToBeChanged == null){
-			System.out.println("Id of product not found. Create the product first.");
-			sc.nextLine();
-			ConsultProducts();
-		}
+			System.out.println("Id of shelf not found. Create the shelf first.");
+			ConsultShelves();
+		}else{
+		
 		long actualCapacity = shelfToBeChanged.getCapacity();
 		Product actualProduct = shelfToBeChanged.getProduct();
 		long actualIdProduct = actualProduct.getId();
 		double actualPrice = shelfToBeChanged.getPrice();
 		actualShelvesList = actualProduct.getShelves_list();
 
-		inputCapacity = "Please insert the new shelf capacity:            Actual capacity: (" + actualCapacity + ")";
-		System.out.println(inputCapacity);
-		capacityString = sc.nextLine();
-		CicleInput(inputCapacity,capacityString,"int");
-		capacity = Long.parseLong(capacityString);
-
-		inputIdProduct= "Please insert new id of the product to be stored:            Actual id: (" + actualIdProduct + ")";
-		System.out.println(inputIdProduct);
-		idProductString=sc.nextLine();
-		CicleInput(inputIdProduct,idProductString,"long");
-		idProduct= Long.parseLong(idProductString);
 		
-		inputPrice = "Please insert the new rent price (diary):            Actual rent price: (" + actualPrice + ")";
-		System.out.println(inputPrice);
-		priceString = sc.nextLine();
-		CicleInput(inputPrice,priceString,"double");
+		while (!verificaVariavel(capacityString, "long") || !verificaVariavel(idProductString, "long") || !verificaVariavel(priceString, "double")){
+			System.out.println( "Please insert the new shelf capacity:            Actual capacity: (" + actualCapacity + ")");
+			capacityString = sc.nextLine();
+			System.out.println("Please insert new id of the product to be stored:            Actual id: (" + actualIdProduct + ")");
+			idProductString=sc.nextLine();
+			System.out.println("Please insert the new rent price (diary):            Actual rent price: (" + actualPrice + ")");
+			priceString = sc.nextLine();
+			System.out.println(priceString);
+			if (!verificaVariavel(capacityString, "long") || !verificaVariavel(idProductString, "long") || !verificaVariavel(priceString, "double"))
+				System.out.println("Inputs of shelf not valid, please insert valid inputs for shelf");			
+		}
+		idProduct= Long.parseLong(idProductString);
+		capacity = Long.parseLong(capacityString);
 		price = Double.parseDouble(priceString);
 
 		for (Product product : values) {
@@ -360,9 +356,9 @@ public class TextInterface {
 				shelfRepository1.EditEntityById(id, shelf);
 			}
 		}
-
-		sc.nextLine();
+		//sc.nextLine();
 		ConsultShelves();
+		}
 	}
 
 	public static void ConsultProduct() {
