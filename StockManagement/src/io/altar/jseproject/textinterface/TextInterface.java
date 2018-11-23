@@ -210,11 +210,11 @@ public class TextInterface {
 	public static void CreateShelf() {
 		ArrayList<Shelf> shelvesList = new ArrayList<Shelf>();
 		System.out.println("Please insert shelf capacity: ");
-		int capacity = sc.nextInt();
+		long capacity = sc.nextLong();
 		System.out.println("Please insert id of the product to be stored: ");
 		long productId = sc.nextLong();
 		System.out.println("Please insert rent price (diary): ");
-		int price = sc.nextInt();
+		double price = sc.nextDouble();
 		int found = 0;
 
 		Collection<Product> values = productRepository1.ConsultEntities();
@@ -277,53 +277,74 @@ public class TextInterface {
 		}
 		return true;
 	}
-
-	public static void EditShelf() {
-		String idStr = "";
-		long id;
-		ArrayList<Shelf> shelvesList = new ArrayList<Shelf>();
-		ArrayList<Shelf> actualShelvesList = new ArrayList<Shelf>();
-
-		Collection<Product> values = productRepository1.ConsultEntities();
-
+	public static void CicleInput(String line, String var, String type) {
+		
 		do {
-			System.out.println("Please insert the id of the shelf to be changed: ");
 
-			idStr = sc.nextLine();
-
-			if (verificaVariavel(idStr, "long")) {
+			if (verificaVariavel(var, type)) {
 				break;
 			} else {
-				System.out.println("Invalid input! Insert valid id!");
+				System.out.println("Invalid input!");
+				System.out.println(line);
 			}
-			
-		}while (!verificaVariavel(idStr, "long"));
-
-		id = Long.parseLong(idStr);
+		} while (!verificaVariavel(var, type));
+	}
+	
+	public static void EditShelf() {
+		String idString = "";
+		String capacityString = "";
+		String idProductString = "";
+		String priceString = "";
+		String inputId = "";
+		String inputCapacity = "";
+		String inputIdProduct = "";
+		String inputPrice = "";
+		long id;
+		long capacity;
+		long idProduct;
+		double price;
+		ArrayList<Shelf> shelvesList = new ArrayList<Shelf>();
+		ArrayList<Shelf> actualShelvesList = new ArrayList<Shelf>();
+		Collection<Product> values = productRepository1.ConsultEntities();
+		
+		inputId = "Please insert the id of the shelf to be changed: ";
+		System.out.println(inputId);
+		idString = sc.nextLine();
+		CicleInput(inputId,idString,"long");
+		id = Long.parseLong(idString);
 		
 		Shelf shelfToBeChanged = shelfRepository1.ConsultEntityById(id);
-		if (shelfToBeChanged == null){}
-		int actualCapacity = shelfToBeChanged.getCapacity();
+		if (shelfToBeChanged == null){
+			System.out.println("Id of product not found. Create the product first.");
+			sc.nextLine();
+			ConsultProducts();
+		}
+		long actualCapacity = shelfToBeChanged.getCapacity();
 		Product actualProduct = shelfToBeChanged.getProduct();
 		long actualIdProduct = actualProduct.getId();
-		int actualPrice = shelfToBeChanged.getPrice();
+		double actualPrice = shelfToBeChanged.getPrice();
 		actualShelvesList = actualProduct.getShelves_list();
 
-		System.out.println("Please insert the new shelf capacity:            Actual capacity: (" + actualCapacity + ")");
+		inputCapacity = "Please insert the new shelf capacity:            Actual capacity: (" + actualCapacity + ")";
+		System.out.println(inputCapacity);
+		capacityString = sc.nextLine();
+		CicleInput(inputCapacity,capacityString,"int");
+		capacity = Long.parseLong(capacityString);
 
-		int capacity = sc.nextInt();
-
-		System.out.println(
-				"Please insert new id of the product to be stored:            Actual id: (" + actualIdProduct + ")");
-		long productId = sc.nextLong();
-
-		System.out.println(
-				"Please insert the new rent price (diary):            Actual rent price: (" + actualPrice + ")");
-		int price = sc.nextInt();
-		int found = 0;
+		inputIdProduct= "Please insert new id of the product to be stored:            Actual id: (" + actualIdProduct + ")";
+		System.out.println(inputIdProduct);
+		idProductString=sc.nextLine();
+		CicleInput(inputIdProduct,idProductString,"long");
+		idProduct= Long.parseLong(idProductString);
+		
+		inputPrice = "Please insert the new rent price (diary):            Actual rent price: (" + actualPrice + ")";
+		System.out.println(inputPrice);
+		priceString = sc.nextLine();
+		CicleInput(inputPrice,priceString,"double");
+		price = Double.parseDouble(priceString);
 
 		for (Product product : values) {
-			if (product.getId() == productId) {
+			if (product.getId() == idProduct) {
 				Shelf shelf = shelfRepository1.ConsultEntityById(id);
 				shelf.setCapacity(capacity);
 				shelf.setProduct(product);
@@ -337,14 +358,9 @@ public class TextInterface {
 				product.setShelves_list(shelvesList);
 
 				shelfRepository1.EditEntityById(id, shelf);
-				found = 1;
 			}
 		}
-		if (found == 0) {
-			System.out.println("Id of product not found. Create the product first.");
-			sc.nextLine();
-			ConsultProducts();
-		}
+
 		sc.nextLine();
 		ConsultShelves();
 	}
