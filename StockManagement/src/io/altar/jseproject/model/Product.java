@@ -5,11 +5,11 @@ import java.util.ArrayList;
 public class Product extends Entity{
 	
 	private ArrayList<Shelf> shelves_list= new ArrayList<Shelf>();
-	private int discount;
-	private int iva;
-	private int pvp;
+	private double discount;
+	private double iva;
+	private double pvp;
 
-	public Product(ArrayList<Shelf> shelves_list, int discount, int iva, int pvp) {
+	public Product(ArrayList<Shelf> shelves_list, double discount, double iva, double pvp) {
 		super();
 		this.shelves_list = shelves_list;
 		this.discount = discount;
@@ -25,27 +25,27 @@ public class Product extends Entity{
 		this.shelves_list = shelves_list;
 	}
 
-	public int getDiscount() {
+	public double getDiscount() {
 		return discount;
 	}
 
-	public void setDiscount(int discount) {
+	public void setDiscount(double discount) {
 		this.discount = discount;
 	}
 
-	public int getIva() {
+	public double getIva() {
 		return iva;
 	}
 
-	public void setIva(int iva) {
+	public void setIva(double iva) {
 		this.iva = iva;
 	}
 
-	public int getPvp() {
+	public double getPvp() {
 		return pvp;
 	}
 
-	public void setPvp(int pvp) {
+	public void setPvp(double pvp) {
 		this.pvp = pvp;
 	}
 	private String getStringOfShelves(){
