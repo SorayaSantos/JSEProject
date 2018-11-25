@@ -301,7 +301,7 @@ public class TextInterface {
 			ConsultProducts();
 		}else{
 		
-			while (!verificaVariavel(stringDiscount, "double") || !verificaVariavel(stringIva, "double") || !verificaVariavel(stringPvp, "double") || stringDiscount.equals("") || stringIva.equals("")|| stringPvp.equals("") ){
+			while (!verificaVariavel(stringDiscount, "double") || !verificaVariavel(stringIva, "double") || !verificaVariavel(stringPvp, "double") || Long.parseLong(stringDiscount)<=0 || Long.parseLong(stringDiscount)>=100|| Long.parseLong(stringIva)<=0 || Long.parseLong(stringIva)>=100 || stringDiscount.equals("") || stringIva.equals("")|| stringPvp.equals("") ){
 				System.out.println("Please insert the discount:             Actual discount: (" + productToBeChanged.getDiscount() + ")");
 				stringDiscount = sc.nextLine();
 				if (stringDiscount.equals("")) {
