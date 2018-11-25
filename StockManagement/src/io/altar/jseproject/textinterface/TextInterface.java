@@ -209,10 +209,11 @@ public class TextInterface {
 			System.out.println("Please insert the pvp: ");
 			stringPvp = sc.nextLine();
 			
-			if (!verificaVariavel(stringDiscount, "double") || !verificaVariavel(stringIva, "double") || !verificaVariavel(stringPvp, "double")){
+			if (!verificaVariavel(stringDiscount, "double") || !verificaVariavel(stringIva, "double") || !verificaVariavel(stringPvp, "double") || Long.parseLong(stringDiscount)<=0 || Long.parseLong(stringDiscount)>=100|| Long.parseLong(stringIva)<=0 || Long.parseLong(stringIva)>=100){
 				System.out.println("Inputs of product not valid, please insert valid inputs for product");			
 			}
-			
+			else {
+						
 			discount= Long.parseLong(stringDiscount);
 			iva = Long.parseLong(stringIva);
 			pvp = Double.parseDouble(stringPvp);
@@ -223,7 +224,7 @@ public class TextInterface {
 		productRepository1.CreateEntities(product);
 
 		}
-		ConsultProducts();
+		ConsultProducts();}
 	}
 
 	public static void CreateShelf() {
@@ -275,6 +276,12 @@ public class TextInterface {
 	public static void EditProduct() {
 		long id = 0;
 		String idString = "";
+		String stringDiscount = "";
+		String stringIva = "";
+		String stringPvp = "";
+		double discount=0;
+		double iva=0;
+		double pvp=0; 
 			
 		while (!verificaVariavel(idString, "long")){
 			System.out.println("Please insert the id of the product to be changed: ");
@@ -286,20 +293,39 @@ public class TextInterface {
 			}
 		}
 		id = Long.parseLong(idString);
-
+		
 		Product productToBeChanged = productRepository1.ConsultEntityById(id);
 		
 		if (productToBeChanged == null){
 			System.out.println("Id of product not found. Create the product first.");
 			ConsultProducts();
 		}else{
+		
+			while (!verificaVariavel(stringDiscount, "double") || !verificaVariavel(stringIva, "double") || !verificaVariavel(stringPvp, "double")){
+				System.out.println("Please insert the discount:             Actual discount: (" + productToBeChanged.getDiscount() + ")");
+				stringDiscount = sc.nextLine();
+				if (stringDiscount.equals("")) {
+					discount=productToBeChanged.getDiscount();
+				}
+				System.out.println("Please insert the iva:             Actual iva: (" + productToBeChanged.getIva() + ")");
+				stringIva = sc.nextLine();
+				if (stringDiscount.equals("")) {
+					discount=productToBeChanged.getIva();
+				}
+				System.out.println("Please insert the pvp:             Actual pvp: (" + productToBeChanged.getPvp() + ")");
+				stringPvp = sc.nextLine();
+				if (stringDiscount.equals("")) {
+					discount=productToBeChanged.getPvp();
+				}
+				
+				if (!verificaVariavel(stringDiscount, "double") || !verificaVariavel(stringIva, "double") || !verificaVariavel(stringPvp, "double") || Long.parseLong(stringDiscount)<=0 || Long.parseLong(stringDiscount)>=100|| Long.parseLong(stringIva)<=0 || Long.parseLong(stringIva)>=100){
+					System.out.println("Inputs of product not valid, please insert valid inputs for product");			
+				}
+				else {	
 			
-		System.out.println("Please insert the new discount: ");
-		double discount = sc.nextInt();
-		System.out.println("Please insert the new iva: ");
-		double iva = sc.nextInt();
-		System.out.println("Please insert the new pvp: ");
-		double pvp = sc.nextInt();
+					discount= Long.parseLong(stringDiscount);
+					iva = Long.parseLong(stringIva);
+					pvp = Double.parseDouble(stringPvp);
 
 		Product product = productRepository1.ConsultEntityById(id);
 		product.setDiscount(discount);
@@ -309,7 +335,8 @@ public class TextInterface {
 		productRepository1.EditEntityById(id, product);
 
 		ConsultProducts();}
-	}
+	}}}
+			
 
 	public static boolean verificaVariavel(String var, String tipo) {
 		try {
@@ -482,6 +509,8 @@ public class TextInterface {
 			System.out.println("Id of product not found. Create the product first.");
 			ConsultProducts();
 		}else{
+		System.out.println("Remove product? Press enter to remove. ");
+		sc.nextLine();
 		productRepository1.RemoveEntityById(id);
 		ConsultProducts();}
 	}
@@ -510,6 +539,8 @@ public class TextInterface {
 		shelvesList = product.getShelves_list();
 		shelvesList.remove(shelf);
 
+		System.out.println("Remove shelf? Press enter to remove. ");
+		sc.nextLine();
 		shelfRepository1.RemoveEntityById(id);
 		ConsultShelves();}
 	}
