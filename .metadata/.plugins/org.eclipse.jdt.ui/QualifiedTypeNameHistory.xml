@@ -13,4 +13,5 @@
 <fullyQualifiedTypeName name="io.altar.jseproject.repositories.EntityRepository"/>
 <fullyQualifiedTypeName name="java.util.Collection"/>
 <fullyQualifiedTypeName name="io.altar.jseproject.textinterface.TextInterface"/>
+<fullyQualifiedTypeName name="java.lang.String"/>
 </qualifiedTypeNameHistroy>
