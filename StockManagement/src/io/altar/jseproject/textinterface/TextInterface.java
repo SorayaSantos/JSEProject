@@ -293,70 +293,57 @@ public class TextInterface {
 			}
 		}
 		id = Long.parseLong(idString);
-		
 		Product productToBeChanged = productRepository1.ConsultEntityById(id);
 		
 		if (productToBeChanged == null){
 			System.out.println("Id of product not found. Create the product first.");
 			ConsultProducts();
+			
 		}else{
-			while ((((verificaVariavel(stringDiscount, "double") && ((Long.parseLong(stringDiscount))<0||(Long.parseLong(stringDiscount))>100)))|| ((verificaVariavel(stringIva, "double") && ((Long.parseLong(stringIva))<0||(Long.parseLong(stringIva))>100)))|| ((verificaVariavel(stringPvp, "double") && ((Long.parseLong(stringPvp))<0))))||(!verificaVariavel(stringDiscount, "double") && stringDiscount.equals(""))||(!verificaVariavel(stringIva, "double") && stringIva.equals(""))||(!verificaVariavel(stringPvp, "double") && stringPvp.equals(""))){			
-				System.out.println("Please insert the discount:             Actual discount: (" + productToBeChanged.getDiscount() + ")");
+			
+			System.out.println("Please insert the discount:             Actual discount: (" + productToBeChanged.getDiscount() + ")");
 			stringDiscount = sc.nextLine();
-			if (stringDiscount.equals("")) {
-				discount=productToBeChanged.getDiscount();
-			}
 			System.out.println("Please insert the iva:             Actual iva: (" + productToBeChanged.getIva() + ")");
 			stringIva = sc.nextLine();
-			if (stringIva.equals("")) {
-				iva=productToBeChanged.getIva();
-			}
 			System.out.println("Please insert the pvp:             Actual pvp: (" + productToBeChanged.getPvp() + ")");
 			stringPvp = sc.nextLine();
+			
+			while ((((verificaVariavel(stringDiscount, "double") && ((Long.parseLong(stringDiscount))<0||(Long.parseLong(stringDiscount))>100)))|| ((verificaVariavel(stringIva, "double") && ((Long.parseLong(stringIva))<0||(Long.parseLong(stringIva))>100)))|| ((verificaVariavel(stringPvp, "double") && ((Long.parseLong(stringPvp))<0))))||(!verificaVariavel(stringDiscount, "double") && !stringDiscount.equals(""))||(!verificaVariavel(stringIva, "double") && !stringIva.equals(""))||(!verificaVariavel(stringPvp, "double") && !stringPvp.equals(""))){			
+				System.out.println("Inputs of product not valid, please insert valid inputs for product");			
+				System.out.println("Please insert the discount:             Actual discount: (" + productToBeChanged.getDiscount() + ")");
+			stringDiscount = sc.nextLine();
+			System.out.println("Please insert the iva:             Actual iva: (" + productToBeChanged.getIva() + ")");
+			stringIva = sc.nextLine();
+			System.out.println("Please insert the pvp:             Actual pvp: (" + productToBeChanged.getPvp() + ")");
+			stringPvp = sc.nextLine();
+			}
+			
+			if (stringDiscount.equals("")) {
+				discount=productToBeChanged.getDiscount();
+			}else {
+				discount= Long.parseLong(stringDiscount);
+			}
+			if (stringIva.equals("")) {
+				iva=productToBeChanged.getIva();
+			}else {
+				iva = Long.parseLong(stringIva);
+			}
 			if (stringPvp.equals("")) {
 				pvp=productToBeChanged.getPvp();
+			}else {
+				pvp = Double.parseDouble(stringPvp);
 			}
-			if ((((verificaVariavel(stringDiscount, "double") && ((Long.parseLong(stringDiscount))<0||(Long.parseLong(stringDiscount))>100)))|| ((verificaVariavel(stringIva, "double") && ((Long.parseLong(stringIva))<0||(Long.parseLong(stringIva))>100)))|| ((verificaVariavel(stringPvp, "double") && ((Long.parseLong(stringPvp))<0))))||(!verificaVariavel(stringDiscount, "double") && stringDiscount.equals(""))||(!verificaVariavel(stringIva, "double") && stringIva.equals(""))||(!verificaVariavel(stringPvp, "double") && stringPvp.equals(""))){
-				System.out.println("Inputs of product not valid, please insert valid inputs for product");			
-			}
-			}
+
+			Product product = productRepository1.ConsultEntityById(id);
+			product.setDiscount(discount);
+			product.setIva(iva);
+			product.setPvp(pvp);
+
+			productRepository1.EditEntityById(id, product);
+
+			ConsultProducts();
 				
-				
-			while (!verificaVariavel(stringDiscount, "double") && stringDiscount.equals(""))	
-			while (!verificaVariavel(stringDiscount, "double") || !verificaVariavel(stringIva, "double") || !verificaVariavel(stringPvp, "double") || Long.parseLong(stringDiscount)<=0 || Long.parseLong(stringDiscount)>=100|| Long.parseLong(stringIva)<=0 || Long.parseLong(stringIva)>=100 || stringDiscount.equals("") || stringIva.equals("")|| stringPvp.equals("") ){
-				System.out.println("Please insert the discount:             Actual discount: (" + productToBeChanged.getDiscount() + ")");
-				stringDiscount = sc.nextLine();
-				if (stringDiscount.equals("")) {
-					discount=productToBeChanged.getDiscount();
-				}
-				System.out.println("Please insert the iva:             Actual iva: (" + productToBeChanged.getIva() + ")");
-				stringIva = sc.nextLine();
-				if (stringIva.equals("")) {
-					iva=productToBeChanged.getIva();
-				}
-				System.out.println("Please insert the pvp:             Actual pvp: (" + productToBeChanged.getPvp() + ")");
-				stringPvp = sc.nextLine();
-				if (stringPvp.equals("")) {
-					pvp=productToBeChanged.getPvp();
-				}
-				if (!verificaVariavel(stringDiscount, "double") || !verificaVariavel(stringIva, "double") || !verificaVariavel(stringPvp, "double") || Long.parseLong(stringDiscount)<=0 || Long.parseLong(stringDiscount)>=100|| Long.parseLong(stringIva)<=0 || Long.parseLong(stringIva)>=100){
-					System.out.println("Inputs of product not valid, please insert valid inputs for product");			
-				}
-				else {	
-			
-					discount= Long.parseLong(stringDiscount);
-					iva = Long.parseLong(stringIva);
-					pvp = Double.parseDouble(stringPvp);
-
-		Product product = productRepository1.ConsultEntityById(id);
-		product.setDiscount(discount);
-		product.setIva(iva);
-		product.setPvp(pvp);
-
-		productRepository1.EditEntityById(id, product);
-
-		ConsultProducts();}
-	}}}
+			}}
 			
 
 	public static boolean verificaVariavel(String var, String tipo) {
