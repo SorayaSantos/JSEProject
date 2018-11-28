@@ -63,7 +63,20 @@ public class ScannerUtils {
 		} while (!isType(input, "Double"));
 		return Double.parseDouble(input);
 	}
-	public static Long getLongFromScanner(String msg, boolean canBeNull, boolean findId) {
+	public static Long getLongFromScanner(String msg, boolean canBeNull) {
+		String input;
+		do {
+			System.out.println(msg);
+			input = sc.nextLine();
+			if (canBeNull && input.equals("")) {
+				return (long) -1;
+			}
+
+		} while (!isType(input, "Long"));
+
+			return Long.parseLong(input);
+	}
+	public static Long findIdProduct(String msg, boolean canBeNull) {
 		String input;
 		do {
 			System.out.println(msg);
@@ -74,13 +87,32 @@ public class ScannerUtils {
 
 		} while (!isType(input, "Long"));
 		
-		if (findId && TextInterface.productRepository1.ConsultEntityById(Long.parseLong(input)) == null){
+		if (TextInterface.productRepository1.ConsultEntityById(Long.parseLong(input)) == null){
 			System.out.println("Id of product not found. Create the product first.");
 			return (long) -2;}
 		else {
 			return Long.parseLong(input);
 		}
 	}
+	public static Long findIdShelf(String msg, boolean canBeNull) {
+		String input;
+		do {
+			System.out.println(msg);
+			input = sc.nextLine();
+			if (canBeNull && input.equals("")) {
+				return (long) -1;
+			}
+
+		} while (!isType(input, "Long"));
+		
+		if (TextInterface.shelfRepository1.ConsultEntityById(Long.parseLong(input)) == null){
+			System.out.println("Id of shelf not found. Create the shelf first.");
+			return (long) -2;}
+		else {
+			return Long.parseLong(input);
+		}
+	}
+	
 
 	public static boolean isType(String input, String type) {
 		Scanner lineSc = new Scanner(input);
@@ -108,7 +140,7 @@ public class ScannerUtils {
 			}
 			break;
 		default:
-			result = true;
+			result = false;
 		}
 		lineSc.close();
 		return result;

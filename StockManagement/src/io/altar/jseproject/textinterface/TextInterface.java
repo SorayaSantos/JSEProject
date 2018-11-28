@@ -14,8 +14,7 @@ public class TextInterface {
 	static ProductRepository productRepository1 = ProductRepository.getInstance();
 	static ShelfRepository shelfRepository1 = ShelfRepository.getInstance();
 	private static Scanner sc = new Scanner(System.in);
-	private static int[] ivas = new int[] {6,13,23};
-
+	private static int[] ivas = new int[] { 6, 13, 23 };
 
 	public static void main(String[] args) {
 
@@ -211,101 +210,60 @@ public class TextInterface {
 	public static void CreateShelf() {
 		ArrayList<Shelf> shelvesList = new ArrayList<Shelf>();
 
-		long capacity=ScannerUtils.getLongFromScanner("Please insert the capacity: ", false, false);
-		long productId=ScannerUtils.getLongFromScanner("Please insert the product id: ", false, true);
-		
-		if (productId==(long)-2) {
+		long capacity = ScannerUtils.getLongFromScanner("Please insert the capacity: ", false);
+		long productId = ScannerUtils.findIdProduct("Please insert the product id: ", false);
+
+		if (productId == (long) -2) {
 			ConsultProducts();
 		}
+		else{
+
+		double price = ScannerUtils.getDoubleFromScanner("Please insert the rent price: ", false);
+
+		Product product = productRepository1.ConsultEntityById(productId);
 		
-		double price =ScannerUtils.getDoubleFromScanner("Please insert the rent price: ", false);
-		
-		Collection<Product> values = productRepository1.ConsultEntities();
-		for (Product prod : values) {
-			if (prod.getId() == productId) {
-				Shelf shelf = new Shelf(capacity, prod, price);
-				shelvesList = prod.getShelves_list();
+				Shelf shelf = new Shelf(capacity, product, price);
+				shelvesList = product.getShelves_list();
 				shelvesList.add(shelf);
-				prod.setShelves_list(shelvesList);
+				product.setShelves_list(shelvesList);
 				shelfRepository1.CreateEntities(shelf);
-				break;
-			}
-		}
-		ConsultShelves();
+				
+		ConsultShelves();}
 	}
 
 	public static void EditProduct() {
-		long id = 0;
-		String idString = "";
-		String stringDiscount = "";
-		String stringIva = "";
-		String stringPvp = "";
-		double discount=0;
-		double iva=0;
-		double pvp=0; 
-			
-		while (!verificaVariavel(idString, "long")){
-			System.out.println("Please insert the id of the product to be changed: ");
-			idString = sc.nextLine();
-		if (!verificaVariavel(idString, "long")) {
-			System.out.println("Invalid input! Please insert a valid input for id.");
-			System.out.println("Please insert the id of the product: ");
-			idString = sc.nextLine();
-			}
-		}
-		id = Long.parseLong(idString);
-		Product productToBeChanged = productRepository1.ConsultEntityById(id);
 		
-		if (productToBeChanged == null){
-			System.out.println("Id of product not found. Create the product first.");
+		long productId = ScannerUtils.findIdProduct("Please insert the id of the product to be changed: ", false);
+		if (productId == (long) -2) {
 			ConsultProducts();
 			
 		}else{
+		Product productToBeChanged = productRepository1.ConsultEntityById(productId);
+
+		int iva = ScannerUtils.getValidIntFromScanner("Please insert the iva:             Actual iva: (" + productToBeChanged.getIva() + ")", ivas, true);
+		
+		double discount = ScannerUtils.getValidDoubleFromScanner("Please insert the discount:             Actual discount: ("
+				+ productToBeChanged.getDiscount() + ")", 100, true);
+		double pvp = ScannerUtils.getDoubleFromScanner("Please insert the pvp:             Actual pvp: (" + productToBeChanged.getPvp() + ")", true);
+
+			Product product = productRepository1.ConsultEntityById(productId);
 			
-			System.out.println("Please insert the discount:             Actual discount: (" + productToBeChanged.getDiscount() + ")");
-			stringDiscount = sc.nextLine();
-			System.out.println("Please insert the iva:             Actual iva: (" + productToBeChanged.getIva() + ")");
-			stringIva = sc.nextLine();
-			System.out.println("Please insert the pvp:             Actual pvp: (" + productToBeChanged.getPvp() + ")");
-			stringPvp = sc.nextLine();
-			
-			while ((((verificaVariavel(stringDiscount, "double") && ((Long.parseLong(stringDiscount))<0||(Long.parseLong(stringDiscount))>100)))|| ((verificaVariavel(stringIva, "double") && ((Long.parseLong(stringIva))<0||(Long.parseLong(stringIva))>100)))|| ((verificaVariavel(stringPvp, "double") && ((Long.parseLong(stringPvp))<0))))||(!verificaVariavel(stringDiscount, "double") && !stringDiscount.equals(""))||(!verificaVariavel(stringIva, "double") && !stringIva.equals(""))||(!verificaVariavel(stringPvp, "double") && !stringPvp.equals(""))){			
-				System.out.println("Inputs of product not valid, please insert valid inputs for product");			
-				System.out.println("Please insert the discount:             Actual discount: (" + productToBeChanged.getDiscount() + ")");
-			stringDiscount = sc.nextLine();
-			System.out.println("Please insert the iva:             Actual iva: (" + productToBeChanged.getIva() + ")");
-			stringIva = sc.nextLine();
-			System.out.println("Please insert the pvp:             Actual pvp: (" + productToBeChanged.getPvp() + ")");
-			stringPvp = sc.nextLine();
+			if (iva  != (long) -1) {
+				product.setIva(iva);
 			}
-			
-			if (stringDiscount.equals("")) {
-				discount=productToBeChanged.getDiscount();
-			}else {
-				discount= Long.parseLong(stringDiscount);
+			if (discount  != (long) -1) {
+				product.setDiscount(discount);	
 			}
-			if (stringIva.equals("")) {
-				iva=productToBeChanged.getIva();
-			}else {
-				iva = Long.parseLong(stringIva);
-			}
-			if (stringPvp.equals("")) {
-				pvp=productToBeChanged.getPvp();
-			}else {
-				pvp = Double.parseDouble(stringPvp);
+			if (pvp  != (long) -1) {
+				product.setPvp(pvp);
 			}
 
-			Product product = productRepository1.ConsultEntityById(id);
-			product.setDiscount(discount);
-			product.setIva(iva);
-			product.setPvp(pvp);
-
-			productRepository1.EditEntityById(id, product);
+			productRepository1.EditEntityById(productId, product);
 
 			ConsultProducts();
-				
-			}}
-			
+
+		}}
+	
 
 	public static boolean verificaVariavel(String var, String tipo) {
 		try {
@@ -328,10 +286,12 @@ public class TextInterface {
 		}
 		return true;
 	}
+
 	public static String cicleInput(String line, String type) {
 		String idString = "";
-		
-		do {		idString = sc.nextLine();
+
+		do {
+			idString = sc.nextLine();
 			if (!verificaVariavel(idString, type)) {
 				System.out.println("Invalid input!");
 				System.out.println(line);
@@ -339,179 +299,116 @@ public class TextInterface {
 		} while (!verificaVariavel(idString, type));
 		return idString;
 	}
-	
+
 	public static void EditShelf() {
 		
-		String capacityString = "";
-		String idProductString = "";
-		String priceString = "";
-		String idString = "";
-		
-		long id=0, capacity=0, idProduct=0;
-		double price=0;
-		ArrayList<Shelf> shelvesList = new ArrayList<Shelf>();
 		ArrayList<Shelf> actualShelvesList = new ArrayList<Shelf>();
-		Collection<Product> values = productRepository1.ConsultEntities();
+		long shelfId = ScannerUtils.findIdShelf("Please insert the id of the shelf to be changed: ", false);
 
-		while (!verificaVariavel(idString, "long")){
-			System.out.println("Please insert the id of the shelf to be changed: ");
-			idString = sc.nextLine();
-		if (!verificaVariavel(idString, "long")) {
-			System.out.println("Invalid input! Please insert a valid input for id.");
-			System.out.println("Please insert the id of the shelf to be chenged: ");
-			idString = sc.nextLine();
-			}
-		}
-		id = Long.parseLong(idString);
-
-		Shelf shelfToBeChanged = shelfRepository1.ConsultEntityById(id);
-		if (shelfToBeChanged == null){
-			System.out.println("Id of shelf not found. Create the shelf first.");
+		if (shelfId == (long) -2) {
 			ConsultShelves();
 		}else{
 		
+		Shelf shelfToBeChanged = shelfRepository1.ConsultEntityById(shelfId);
 		long actualCapacity = shelfToBeChanged.getCapacity();
 		Product actualProduct = shelfToBeChanged.getProduct();
 		long actualIdProduct = actualProduct.getId();
 		double actualPrice = shelfToBeChanged.getPrice();
 		actualShelvesList = actualProduct.getShelves_list();
 
+		long capacity = ScannerUtils.getLongFromScanner("Please insert the new shelf capacity:            Actual capacity: (" + actualCapacity + ")", true);
+		long productId = ScannerUtils.findIdProduct("Please insert new id of the product to be stored:            Actual id: (" + actualIdProduct + ")", true);
+		if (productId == (long) -2) {
+			ConsultProducts();
+		}else{
+		double price = ScannerUtils.getDoubleFromScanner("Please insert the new rent price (diary):            Actual rent price: (" + actualPrice + ")", true);
+					
+		if (capacity  != (long) -1) {
+			shelfToBeChanged.setCapacity(capacity);
+		}
+		if (productId != (long) -1) {
+			Product product = productRepository1.ConsultEntityById(productId);
+			shelfToBeChanged.setProduct(product);
+			ArrayList<Shelf> shelvesList = product.getShelves_list();
+			shelvesList.add(shelfToBeChanged);
+			product.setShelves_list(shelvesList);
+		}
+		if (price  != (long) -1) {
+			shelfToBeChanged.setPrice(price);
+		}
 		
-		while (!verificaVariavel(capacityString, "long") || !verificaVariavel(idProductString, "long") || !verificaVariavel(priceString, "double")){
-			System.out.println( "Please insert the new shelf capacity:            Actual capacity: (" + actualCapacity + ")");
-			capacityString = sc.nextLine();
-			System.out.println("Please insert new id of the product to be stored:            Actual id: (" + actualIdProduct + ")");
-			idProductString=sc.nextLine();
-			System.out.println("Please insert the new rent price (diary):            Actual rent price: (" + actualPrice + ")");
-			priceString = sc.nextLine();
-			System.out.println(priceString);
-			if (!verificaVariavel(capacityString, "long") || !verificaVariavel(idProductString, "long") || !verificaVariavel(priceString, "double"))
-				System.out.println("Inputs of shelf not valid, please insert valid inputs for shelf");
-		}
-		idProduct= Long.parseLong(idProductString);
-		capacity = Long.parseLong(capacityString);
-		price = Double.parseDouble(priceString);
+		actualShelvesList.remove(shelfToBeChanged);
+		actualProduct.setShelves_list(actualShelvesList);
 
-		for (Product product : values) {
-			if (product.getId() == idProduct) {
-				Shelf shelf = shelfRepository1.ConsultEntityById(id);
-				shelf.setCapacity(capacity);
-				shelf.setProduct(product);
-				shelf.setPrice(price);
-
-				shelvesList = product.getShelves_list();
-				shelvesList.remove(shelfToBeChanged);
-				actualShelvesList.remove(shelfToBeChanged);
-				actualProduct.setShelves_list(actualShelvesList);
-				shelvesList.add(shelf);
-				product.setShelves_list(shelvesList);
-
-				shelfRepository1.EditEntityById(id, shelf);
-			}
-		}
-		//sc.nextLine();
+		shelfRepository1.EditEntityById(shelfId, shelfToBeChanged );
+	
 		ConsultShelves();
-		}
+		}}
 	}
 
 	public static void ConsultProduct() {
 		
-		String stringId = "";
-		long id = 0;
-		while (!verificaVariavel(stringId, "long")){
-			System.out.println("Please insert the id of the product: ");
-			stringId = sc.nextLine();
-		if (!verificaVariavel(stringId, "long")) {
-			System.out.println("Invalid input! Please insert a valid input for id.");
-			System.out.println("Please insert the id of the product: ");
-			stringId = sc.nextLine();
-			}
-		}
-		id=Long.parseLong(stringId);
-		if (productRepository1.ConsultEntityById(id) == null){
-			System.out.println("Id of product not found. Create the product first.");
+		long productId = ScannerUtils.findIdProduct("Please insert the id of the product to be changed: ", false);
+		if (productId == (long) -2) {
 			ConsultProducts();
 		}else{
-		System.out.println(productRepository1.ConsultEntityById(id));
-		BeginMenu();}
+
+			System.out.println(productRepository1.ConsultEntityById(productId));
+			BeginMenu();
+		}
 	}
 
 	public static void ConsultShelf() {
 		
-		String stringId = "";
-		long id = 0;
-		while (!verificaVariavel(stringId, "long")){
-			System.out.println("Please insert the id of the shelf: ");
-			stringId = sc.nextLine();
-		if (!verificaVariavel(stringId, "long")) {
-			System.out.println("Invalid input! Please insert a valid input for id.");
-			System.out.println("Please insert the id of the shelf: ");
-			stringId = sc.nextLine();
-			}
-		}
-		id=Long.parseLong(stringId);
-		if (shelfRepository1.ConsultEntityById(id) == null){
-			System.out.println("Id of shelf not found. Create the shelf first.");
+		long shelfId = ScannerUtils.findIdShelf("Please insert the id of the shelf to be changed: ", false);
+
+		if (shelfId == (long) -2) {
 			ConsultShelves();
 		}else{
-		System.out.println(shelfRepository1.ConsultEntityById(id));
-		BeginMenu();}
-		
-	}
-
-	public static void RemoveProduct() {
-		System.out.println("Please insert the id of the product to be removed: ");
-		String stringId = sc.nextLine();
-		long id = 0;
-
-		while (!verificaVariavel(stringId, "long")){
-			System.out.println("Please insert the id of the product to be removed: ");
-			stringId = sc.nextLine();
-		if (!verificaVariavel(stringId, "long")) {
-			System.out.println("Invalid input! Please insert a valid input for id.");
-			System.out.println("Please insert the id of the product to be removed: ");
-			stringId = sc.nextLine();
-			}
+			System.out.println(shelfRepository1.ConsultEntityById(shelfId));
+			BeginMenu();
 		}
-		id=Long.parseLong(stringId);
-		if (productRepository1.ConsultEntityById(id) == null){
-			System.out.println("Id of product not found. Create the product first.");
+	}
+	public static void RemoveProduct() {
+		
+		long productId = ScannerUtils.findIdProduct("Please insert the id of the product to be removed: ", false);
+		if (productId == (long) -2) {
 			ConsultProducts();
 		}else{
-		System.out.println("Remove product? Press enter to remove. ");
-		sc.nextLine();
-		productRepository1.RemoveEntityById(id);
-		ConsultProducts();}
+			System.out.println("Remove product? Press enter to remove. ");
+			sc.nextLine();
+			Product product = productRepository1.ConsultEntityById(productId);
+			ArrayList<Shelf> shelvesList = product.getShelves_list();
+			
+			for (Shelf shelf:shelvesList ){
+				shelf.setProduct(null);
+			}
+			
+			productRepository1.RemoveEntityById(productId);
+			ConsultProducts();
+		}
 	}
 
 	public static void RemoveShelf() {
-		String stringId = "";
-		long id = 0;
-		while (!verificaVariavel(stringId, "long")){
-			System.out.println("Please insert the id of the shelf to be removed: ");
-			stringId = sc.nextLine();
-		if (!verificaVariavel(stringId, "long")) {
-			System.out.println("Invalid input! Please insert a valid input for id.");
-			System.out.println("Please insert the id of the shelf to be removed: ");
-			stringId = sc.nextLine();
-			}
-		}
-		id=Long.parseLong(stringId);
-		if (shelfRepository1.ConsultEntityById(id) == null){
-			System.out.println("Id of shelf not found. Create the shelf first.");
+		
+		long shelfId = ScannerUtils.findIdShelf("Please insert the id of the shelf to be changed: ", false);
+
+		if (shelfId == (long) -2) {
 			ConsultShelves();
 		}else{
+			
+			Shelf shelf = shelfRepository1.ConsultEntityById(shelfId);
+			Product product = shelf.getProduct();
+			ArrayList<Shelf> shelvesList = new ArrayList<Shelf>();
+			shelvesList = product.getShelves_list();
 
-		Shelf shelf = shelfRepository1.ConsultEntityById(id);
-		Product product = shelf.getProduct();
-		ArrayList<Shelf> shelvesList = new ArrayList<Shelf>();
-		shelvesList = product.getShelves_list();
-		shelvesList.remove(shelf);
-
-		System.out.println("Remove shelf? Press enter to remove. ");
-		sc.nextLine();
-		shelfRepository1.RemoveEntityById(id);
-		ConsultShelves();}
+			System.out.println("Remove shelf? Press enter to remove. ");
+			shelvesList.remove(shelf);
+			product.setShelves_list(shelvesList);
+			sc.nextLine();
+			shelfRepository1.RemoveEntityById(shelfId);
+			ConsultShelves();
+		}
 	}
 
 }
