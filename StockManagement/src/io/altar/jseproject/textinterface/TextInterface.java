@@ -14,6 +14,8 @@ public class TextInterface {
 	static ProductRepository productRepository1 = ProductRepository.getInstance();
 	static ShelfRepository shelfRepository1 = ShelfRepository.getInstance();
 	private static Scanner sc = new Scanner(System.in);
+	private static int[] ivas = new int[] {6,13,23};
+
 
 	public static void main(String[] args) {
 
@@ -193,71 +195,30 @@ public class TextInterface {
 	}
 
 	public static void CreateProduct() {
-		
-		String stringDiscount = "";
-		String stringIva = "";
-		String stringPvp = "";
-		double discount=0;
-		double iva=0;
-		double pvp=0;
-		
-		while (!verificaVariavel(stringDiscount, "double") || !verificaVariavel(stringIva, "double") || !verificaVariavel(stringPvp, "double")){
-			System.out.println("Please insert the discount: ");
-			stringDiscount = sc.nextLine();
-			System.out.println("Please insert the iva: ");
-			stringIva = sc.nextLine();
-			System.out.println("Please insert the pvp: ");
-			stringPvp = sc.nextLine();
-			
-			if (!verificaVariavel(stringDiscount, "double") || !verificaVariavel(stringIva, "double") || !verificaVariavel(stringPvp, "double") || Long.parseLong(stringDiscount)<=0 || Long.parseLong(stringDiscount)>=100|| Long.parseLong(stringIva)<=0 || Long.parseLong(stringIva)>=100){
-				System.out.println("Inputs of product not valid, please insert valid inputs for product");			
-			}
-			else {
-						
-			discount= Long.parseLong(stringDiscount);
-			iva = Long.parseLong(stringIva);
-			pvp = Double.parseDouble(stringPvp);
-			
 		ArrayList<Shelf> shelvesList = new ArrayList<Shelf>();
+
+		System.out.println("Create Product");
+		int iva = ScannerUtils.getValidIntFromScanner("Please insert the iva: ", ivas, false);
+		double discount = ScannerUtils.getValidDoubleFromScanner("Please insert the discount: ", 100, false);
+		double pvp = ScannerUtils.getDoubleFromScanner("Please insert the pvp: ", false);
 
 		Product product = new Product(shelvesList, discount, iva, pvp);
 		productRepository1.CreateEntities(product);
 
-		}
-		ConsultProducts();}
+		ConsultProducts();
 	}
 
 	public static void CreateShelf() {
 		ArrayList<Shelf> shelvesList = new ArrayList<Shelf>();
-		String stringCapacity = "";
-		String stringProductId = "";
-		String stringPrice = "";
-		long capacity=0;
-		long productId=0;
-		double price =0;
+
+		long capacity=ScannerUtils.getLongFromScanner("Please insert the capacity: ", false, false);
+		long productId=ScannerUtils.getLongFromScanner("Please insert the product id: ", false, true);
 		
-		while (!verificaVariavel(stringCapacity, "long") || !verificaVariavel(stringProductId, "long") || !verificaVariavel(stringPrice, "double")){
-		System.out.println("Please insert shelf capacity: ");
-		stringCapacity = sc.nextLine();
-		System.out.println("Please insert id of the product to be stored: ");
-		stringProductId = sc.nextLine();
-		if (productRepository1.ConsultEntityById(Long.parseLong(stringProductId)) == null){
-			System.out.println("Id of product not found. Create the product first.");
+		if (productId==(long)-2) {
 			ConsultProducts();
-			break;
-		}else{
-			System.out.println("Please insert rent price (diary): ");
-			stringPrice = sc.nextLine();
-			if (!verificaVariavel(stringCapacity, "double") || !verificaVariavel(stringProductId, "double") || !verificaVariavel(stringPrice, "double")){
-				System.out.println("Inputs of shelf not valid, please insert valid inputs for shelf");			
-			}
-			else {continue;}
-		}
 		}
 		
-		productId= Long.parseLong(stringProductId);
-		capacity = Long.parseLong(stringCapacity);
-		price = Double.parseDouble(stringPrice);
+		double price =ScannerUtils.getDoubleFromScanner("Please insert the rent price: ", false);
 		
 		Collection<Product> values = productRepository1.ConsultEntities();
 		for (Product prod : values) {
@@ -552,4 +513,5 @@ public class TextInterface {
 		shelfRepository1.RemoveEntityById(id);
 		ConsultShelves();}
 	}
+
 }
