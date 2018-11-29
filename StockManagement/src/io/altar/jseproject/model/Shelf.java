@@ -42,7 +42,7 @@ public class Shelf extends Entity{
 	@Override
 	public String toString() {
 		if(product==null){
-			return "Shelf"+getId() + ", Shelf [capacity=" + capacity + ", product=product doesn't exists" + ", price=" + price + "]";
+			return "Shelf"+getId() + ", Shelf [capacity=" + capacity + ", product=none product stored" + ", price=" + price + "]";
 		}
 		else{
 			return "Shelf"+getId() + ", Shelf [capacity=" + capacity + ", product=" + product.toString() + ", price=" + price + "]";

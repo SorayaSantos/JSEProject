@@ -209,52 +209,63 @@ public class TextInterface {
 
 	public static void CreateShelf() {
 		ArrayList<Shelf> shelvesList = new ArrayList<Shelf>();
+		Product product = null;
+		Shelf shelf = null;
 
 		long capacity = ScannerUtils.getLongFromScanner("Please insert the capacity: ", false);
-		long productId = ScannerUtils.findIdProduct("Please insert the product id: ", false);
+		long productId = ScannerUtils.findIdProduct("Please insert the product id: ", true);
 
 		if (productId == (long) -2) {
 			ConsultProducts();
-		}
-		else{
+		} else {
 
-		double price = ScannerUtils.getDoubleFromScanner("Please insert the rent price: ", false);
+			double price = ScannerUtils.getDoubleFromScanner("Please insert the rent price: ", false);
 
-		Product product = productRepository1.ConsultEntityById(productId);
-		
-				Shelf shelf = new Shelf(capacity, product, price);
+			if (productId != (long) -1) {
+				product = productRepository1.ConsultEntityById(productId);
 				shelvesList = product.getShelves_list();
+				shelf = new Shelf(capacity, product, price);
 				shelvesList.add(shelf);
 				product.setShelves_list(shelvesList);
-				shelfRepository1.CreateEntities(shelf);
-				
-		ConsultShelves();}
+			} else {
+				product = null;
+				shelf = new Shelf(capacity, product, price);
+
+			}
+
+			shelfRepository1.CreateEntities(shelf);
+
+			ConsultShelves();
+		}
 	}
 
 	public static void EditProduct() {
-		
+
 		long productId = ScannerUtils.findIdProduct("Please insert the id of the product to be changed: ", false);
 		if (productId == (long) -2) {
 			ConsultProducts();
-			
-		}else{
-		Product productToBeChanged = productRepository1.ConsultEntityById(productId);
 
-		int iva = ScannerUtils.getValidIntFromScanner("Please insert the iva:             Actual iva: (" + productToBeChanged.getIva() + ")", ivas, true);
-		
-		double discount = ScannerUtils.getValidDoubleFromScanner("Please insert the discount:             Actual discount: ("
-				+ productToBeChanged.getDiscount() + ")", 100, true);
-		double pvp = ScannerUtils.getDoubleFromScanner("Please insert the pvp:             Actual pvp: (" + productToBeChanged.getPvp() + ")", true);
+		} else {
+			Product productToBeChanged = productRepository1.ConsultEntityById(productId);
+
+			int iva = ScannerUtils.getValidIntFromScanner(
+					"Please insert the iva:             Actual iva: (" + productToBeChanged.getIva() + ")", ivas, true);
+
+			double discount = ScannerUtils
+					.getValidDoubleFromScanner("Please insert the discount:             Actual discount: ("
+							+ productToBeChanged.getDiscount() + ")", 100, true);
+			double pvp = ScannerUtils.getDoubleFromScanner(
+					"Please insert the pvp:             Actual pvp: (" + productToBeChanged.getPvp() + ")", true);
 
 			Product product = productRepository1.ConsultEntityById(productId);
-			
-			if (iva  != (long) -1) {
+
+			if (iva != (long) -1) {
 				product.setIva(iva);
 			}
-			if (discount  != (long) -1) {
-				product.setDiscount(discount);	
+			if (discount != (long) -1) {
+				product.setDiscount(discount);
 			}
-			if (pvp  != (long) -1) {
+			if (pvp != (long) -1) {
 				product.setPvp(pvp);
 			}
 
@@ -262,8 +273,8 @@ public class TextInterface {
 
 			ConsultProducts();
 
-		}}
-	
+		}
+	}
 
 	public static boolean verificaVariavel(String var, String tipo) {
 		try {
@@ -301,57 +312,84 @@ public class TextInterface {
 	}
 
 	public static void EditShelf() {
-		
+
 		ArrayList<Shelf> actualShelvesList = new ArrayList<Shelf>();
 		long shelfId = ScannerUtils.findIdShelf("Please insert the id of the shelf to be changed: ", false);
+		long productId;
+		long actualIdProduct;
+		double actualPrice;
+		Product actualProduct = null;
+		Product product = null;
 
 		if (shelfId == (long) -2) {
 			ConsultShelves();
-		}else{
-		
-		Shelf shelfToBeChanged = shelfRepository1.ConsultEntityById(shelfId);
-		long actualCapacity = shelfToBeChanged.getCapacity();
-		Product actualProduct = shelfToBeChanged.getProduct();
-		long actualIdProduct = actualProduct.getId();
-		double actualPrice = shelfToBeChanged.getPrice();
-		actualShelvesList = actualProduct.getShelves_list();
+		} else {
 
-		long capacity = ScannerUtils.getLongFromScanner("Please insert the new shelf capacity:            Actual capacity: (" + actualCapacity + ")", true);
-		long productId = ScannerUtils.findIdProduct("Please insert new id of the product to be stored:            Actual id: (" + actualIdProduct + ")", true);
-		if (productId == (long) -2) {
-			ConsultProducts();
-		}else{
-		double price = ScannerUtils.getDoubleFromScanner("Please insert the new rent price (diary):            Actual rent price: (" + actualPrice + ")", true);
-					
-		if (capacity  != (long) -1) {
-			shelfToBeChanged.setCapacity(capacity);
-		}
-		if (productId != (long) -1) {
-			Product product = productRepository1.ConsultEntityById(productId);
-			shelfToBeChanged.setProduct(product);
-			ArrayList<Shelf> shelvesList = product.getShelves_list();
-			shelvesList.add(shelfToBeChanged);
-			product.setShelves_list(shelvesList);
-		}
-		if (price  != (long) -1) {
-			shelfToBeChanged.setPrice(price);
-		}
-		
-		actualShelvesList.remove(shelfToBeChanged);
-		actualProduct.setShelves_list(actualShelvesList);
+			Shelf shelfToBeChanged = shelfRepository1.ConsultEntityById(shelfId);
+			long actualCapacity = shelfToBeChanged.getCapacity();
+			if (shelfToBeChanged.getProduct() != null) {
+				actualProduct = shelfToBeChanged.getProduct();
+				actualIdProduct = actualProduct.getId();
+				actualShelvesList = actualProduct.getShelves_list();
+				productId = ScannerUtils
+						.findIdProduct("Please insert new id of the product to be stored:            Actual id: ("
+								+ actualIdProduct + ")", true);
+			} else {
+				productId = ScannerUtils.findIdProduct(
+						"Please insert new id of the product to be stored:            Actual id: (no product stored)",
+						true);
+			}
+			actualPrice = shelfToBeChanged.getPrice();
 
-		shelfRepository1.EditEntityById(shelfId, shelfToBeChanged );
-	
-		ConsultShelves();
-		}}
+			long capacity = ScannerUtils.getLongFromScanner(
+					"Please insert the new shelf capacity:            Actual capacity: (" + actualCapacity + ")", true);
+
+			double price = ScannerUtils.getDoubleFromScanner(
+					"Please insert the new rent price (diary):            Actual rent price: (" + actualPrice + ")",
+					true);
+
+			if (productId != (long) -1) {
+				product = productRepository1.ConsultEntityById(productId);
+				shelfToBeChanged.setProduct(product);
+				ArrayList<Shelf> shelvesList = product.getShelves_list();
+				shelvesList.add(shelfToBeChanged);
+				product.setShelves_list(shelvesList);
+
+				if (capacity != (long) -1) {
+					shelfToBeChanged.setCapacity(capacity);
+				}
+
+				if (price != (long) -1) {
+					shelfToBeChanged.setPrice(price);
+				}
+				if (actualProduct != null) {
+					actualShelvesList.remove(shelfToBeChanged);
+					actualProduct.setShelves_list(actualShelvesList);
+				}
+
+			} else if (productId == (long) -1) {
+				if (capacity != (long) -1) {
+					shelfToBeChanged.setCapacity(capacity);
+				}
+
+				if (price != (long) -1) {
+					shelfToBeChanged.setPrice(price);
+				}
+
+			}
+			shelfRepository1.EditEntityById(shelfId, shelfToBeChanged);
+
+			ConsultShelves();
+
+		}
 	}
 
 	public static void ConsultProduct() {
-		
+
 		long productId = ScannerUtils.findIdProduct("Please insert the id of the product to be changed: ", false);
 		if (productId == (long) -2) {
 			ConsultProducts();
-		}else{
+		} else {
 
 			System.out.println(productRepository1.ConsultEntityById(productId));
 			BeginMenu();
@@ -359,53 +397,57 @@ public class TextInterface {
 	}
 
 	public static void ConsultShelf() {
-		
+
 		long shelfId = ScannerUtils.findIdShelf("Please insert the id of the shelf to be changed: ", false);
 
 		if (shelfId == (long) -2) {
 			ConsultShelves();
-		}else{
+		} else {
 			System.out.println(shelfRepository1.ConsultEntityById(shelfId));
 			BeginMenu();
 		}
 	}
+
 	public static void RemoveProduct() {
-		
+
 		long productId = ScannerUtils.findIdProduct("Please insert the id of the product to be removed: ", false);
 		if (productId == (long) -2) {
 			ConsultProducts();
-		}else{
+		} else {
 			System.out.println("Remove product? Press enter to remove. ");
 			sc.nextLine();
 			Product product = productRepository1.ConsultEntityById(productId);
 			ArrayList<Shelf> shelvesList = product.getShelves_list();
-			
-			for (Shelf shelf:shelvesList ){
+
+			for (Shelf shelf : shelvesList) {
 				shelf.setProduct(null);
 			}
-			
+
 			productRepository1.RemoveEntityById(productId);
 			ConsultProducts();
 		}
 	}
 
 	public static void RemoveShelf() {
-		
-		long shelfId = ScannerUtils.findIdShelf("Please insert the id of the shelf to be changed: ", false);
+
+		long shelfId = ScannerUtils.findIdShelf("Please insert the id of the shelf to be removed: ", false);
+		Product product = null;
 
 		if (shelfId == (long) -2) {
 			ConsultShelves();
-		}else{
-			
+		} else {
+
 			Shelf shelf = shelfRepository1.ConsultEntityById(shelfId);
-			Product product = shelf.getProduct();
+			product = shelf.getProduct();
 			ArrayList<Shelf> shelvesList = new ArrayList<Shelf>();
+			
+			if (product!=null){
 			shelvesList = product.getShelves_list();
 
 			System.out.println("Remove shelf? Press enter to remove. ");
 			shelvesList.remove(shelf);
-			product.setShelves_list(shelvesList);
-			sc.nextLine();
+			product.setShelves_list(shelvesList);}
+
 			shelfRepository1.RemoveEntityById(shelfId);
 			ConsultShelves();
 		}
